@@ -3,7 +3,7 @@ const { AuthenticationError, ForbiddenError } = require('apollo-server');
 const { AuthService } = require('../services/AuthService');
 
 
-// Resolvers define the technique for fetching the types in the schema.  
+// Resolvers define the technique for fetching the types in the schema.
 const resolvers = {
   // Post id, title and content can be ommited. Default apollo-server configuration will resolve these properties automatically
   Post: {
@@ -22,7 +22,6 @@ const resolvers = {
   },
   User :{
     posts(obj, args, context, info) {
-      console.log(obj.id)
       return  posts.filter(post => post.author === obj.id)
     }
   },
@@ -34,16 +33,19 @@ const resolvers = {
       return posts.find(post => post.id === args.id)
     },
     getHottestPost(obj, args, context, info) {
-      console.log(context.user);
-
       return posts.reduce((prev, current) => {
         return prev.thumbsUp >= current.thumbsUp ? prev : current;
       })
     },
     getUsers(obj, args, context, info) {
-      console.log(obj, args, context, info);
       return users;
-    },  
+    },
+    me(obj, args, context, info) {
+      if(!context.user.id) {
+        throw new ForbiddenError('You must be logged in');
+      }
+      return context.user;
+    }
   },
   Mutation: {
     login(obj, { email, password }, context) {
@@ -63,11 +65,13 @@ const resolvers = {
       if(!context.user.id) {
         throw new ForbiddenError('You must be logged in');
       }
-
+      const lastPostId = parseInt((posts[posts.length - 1].id), 10);
+      const newPostId =  (lastPostId + 1).toString();
+      
       const newPost = {
-        id: parseInt((posts[posts.length - 1].id), 10) + 1,
-        title, 
-        content, 
+        id: newPostId,
+        title,
+        content,
         author: context.user.id.toString(),
         thumbsUp: 0,
         thumbsDown: 0,
@@ -76,15 +80,23 @@ const resolvers = {
       return newPost;
     },
     voteUp(obj, args, context, info) {
+      if(!context.user.id) {
+        throw new ForbiddenError('You must be logged in');
+      }
+
       const postToUpdate = posts.find(post => post.id === args.post);
       postToUpdate.thumbsUp = postToUpdate.thumbsUp + 1;
-      
-      return postToUpdate; 
+
+      return postToUpdate;
     },
     voteDown(obj, args, context, info) {
+      if(!context.user.id) {
+        throw new ForbiddenError('You must be logged in');
+      }
+
       const postToUpdate = posts.find(post => post.id === args.post);
       postToUpdate.thumbsDown = postToUpdate.thumbsDown + 1;
-      
+
       return postToUpdate;
     }
   },
