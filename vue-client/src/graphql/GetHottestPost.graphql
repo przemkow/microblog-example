@@ -1,0 +1,13 @@
+query GetHottestPost {
+  getHottestPost {
+    id
+    title
+    content
+    thumbsUp
+    thumbsDown
+    author {
+      id
+      email
+    }
+  }
+}

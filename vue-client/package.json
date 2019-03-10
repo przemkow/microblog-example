@@ -5,10 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "generate-schema": "apollo service:download graphql.schema.json"
   },
   "dependencies": {
     "vue": "^2.6.6",
+    "vue-apollo": "^3.0.0-beta.11",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
@@ -16,9 +18,12 @@
     "@vue/cli-plugin-eslint": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
     "@vue/eslint-config-airbnb": "^4.0.0",
+    "apollo": "^2.6.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
+    "graphql-tag": "^2.9.0",
+    "vue-cli-plugin-apollo": "^0.19.1",
     "vue-template-compiler": "^2.5.21"
   }
 }

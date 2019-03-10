@@ -1,0 +1,6 @@
+mutation VoteDown($postId: ID!) {
+  voteDown(post: $postId) {
+    id
+    thumbsDown
+  }
+}
