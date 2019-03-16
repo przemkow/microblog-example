@@ -1,0 +1,11 @@
+<nav class="navbar navbar-dark bg-primary justify-content-between">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">Microblog</a>
+    <div *ngIf="isLoggedIn" class="d-flex">
+      <app-user-info></app-user-info>
+      <button class="btn navbar-link" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>

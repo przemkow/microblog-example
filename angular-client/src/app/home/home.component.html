@@ -1,0 +1,31 @@
+<div>
+  <div class="row">
+    <div class="col-4">
+      <h5>Hottest Post</h5>
+      <span *ngIf="hottestPostLoading; else hottestPostCard"> Loading... </span>
+      <ng-template #hottestPostCard>
+        <app-post-card *ngIf="!hottestPostLoading"
+            [title]="hottestPost.title"
+            [author]="hottestPost.author.email"
+            [content]="hottestPost.content"
+            [thumbsDown]="hottestPost.thumbsDown"
+            [thumbsUp]="hottestPost.thumbsUp"
+            (voteUp)="onVoteUp(hottestPost.id)"
+            (voteDown)="onVoteDown(hottestPost.id)">
+        </app-post-card>
+      </ng-template>
+    </div>
+    <div class="col">
+      <app-post-card *ngFor="let post of posts"
+          [title]="post.title"
+          [author]="post.author.email"
+          [content]="post.content"
+          [thumbsDown]="post.thumbsDown"
+          [thumbsUp]="post.thumbsUp"
+          (voteUp)="onVoteUp(post.id)"
+          (voteDown)="onVoteDown(post.id)">
+      </app-post-card>
+      <app-post-form (submitForm)="addNewPost($event)"> </app-post-form>
+    </div>
+  </div>
+</div>
