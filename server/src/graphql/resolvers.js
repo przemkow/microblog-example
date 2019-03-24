@@ -7,40 +7,40 @@ const { AuthService } = require('../services/AuthService');
 const resolvers = {
   // Post id, title and content can be ommited. Default apollo-server configuration will resolve these properties automatically
   Post: {
-    id(obj, args, context, info) {
-      return obj.id;
+    id(parent, args, context, info) {
+      return parent.id;
     },
-    title(obj, args, context, info) {
-      return obj.title;
+    title(parent, args, context, info) {
+      return parent.title;
     },
-    content(obj, args, context, info) {
-      return obj.content;
+    content(parent, args, context, info) {
+      return parent.content;
     },
-    author(obj, args, context, info) {
-      return users.find(user => user.id === obj.author);
+    author(parent, args, context, info) {
+      return users.find(user => user.id === parent.author);
     }
   },
   User :{
-    posts(obj, args, context, info) {
-      return  posts.filter(post => post.author === obj.id)
+    posts(parent, args, context, info) {
+      return  posts.filter(post => post.author === parent.id)
     }
   },
   Query: {
-    getPosts(obj, args, context, info) {
+    getPosts(parent, args, context, info) {
       return posts;
     },
-    getPost(obj, args, context, info) {
+    getPost(parent, args, context, info) {
       return posts.find(post => post.id === args.id)
     },
-    getHottestPost(obj, args, context, info) {
+    getHottestPost(parent, args, context, info) {
       return posts.reduce((prev, current) => {
         return prev.thumbsUp >= current.thumbsUp ? prev : current;
       })
     },
-    getUsers(obj, args, context, info) {
+    getUsers(parent, args, context, info) {
       return users;
     },
-    me(obj, args, context, info) {
+    me(parent, args, context, info) {
       if(!context.user.id) {
         throw new ForbiddenError('You must be logged in');
       }
@@ -48,7 +48,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    login(obj, { email, password }, context) {
+    login(parent, { email, password }, context) {
       const user = users.find(user => user.email === email);
       if (!user) {
         throw new AuthenticationError(`User not found`);
@@ -61,7 +61,7 @@ const resolvers = {
         }
       }
     },
-    addPost(obj, { title, content }, context, info) {
+    addPost(parent, { title, content }, context, info) {
       if(!context.user.id) {
         throw new ForbiddenError('You must be logged in');
       }
@@ -79,7 +79,7 @@ const resolvers = {
       posts.push(newPost);
       return newPost;
     },
-    voteUp(obj, args, context, info) {
+    voteUp(parent, args, context, info) {
       if(!context.user.id) {
         throw new ForbiddenError('You must be logged in');
       }
@@ -89,7 +89,7 @@ const resolvers = {
 
       return postToUpdate;
     },
-    voteDown(obj, args, context, info) {
+    voteDown(parent, args, context, info) {
       if(!context.user.id) {
         throw new ForbiddenError('You must be logged in');
       }
