@@ -51,16 +51,23 @@ export class HomeComponent implements OnInit, OnDestroy {
       mutation: VOTE_DOWN,
       variables: {
         postId
-      }
+      },
     }).subscribe();
   }
 
-  onVoteUp(postId) {
+  onVoteUp(postId: number, thumbsUp: number) {
     this.apollo.mutate({
       mutation: VOTE_UP,
       variables: {
         postId
-      }
+      },
+      optimisticResponse: {
+        voteUp: {
+          __typename: 'Post',
+          id: postId,
+          thumbsUp: thumbsUp + 1,
+        },
+      },
     }).subscribe();
   }
 

@@ -54,7 +54,14 @@ function Home(props) {
                   thumbsUpClick={() => props.voteUp({
                     variables: {
                       postId: post.id
-                    }
+                    },
+                    optimisticResponse: {
+                      voteUp: {
+                        __typename: 'Post',
+                        id: post.id,
+                        thumbsUp: post.thumbsUp + 1,
+                      },
+                    },
                   })}
                   thumbsDownClick={() => props.voteDown({
                     variables: {

@@ -24,7 +24,7 @@
             :content="post.content"
             :thumbs-down="post.thumbsDown"
             :thumbs-up="post.thumbsUp"
-            @voteUp="voteUp(post.id)"
+            @voteUp="voteUp(post.id, post.thumbsUp)"
             @voteDown="voteDown(post.id)">
         </post-card>
         <post-form @submitForm="addNewPost">
@@ -64,9 +64,16 @@ export default {
     },
   },
   methods: {
-    voteUp(postId) {
+    voteUp(postId, thumbsUp) {
       this.$apollo.mutate({
         mutation: VoteUpMutation,
+        optimisticResponse: {
+          voteUp: {
+            __typename: 'Post',
+            id: postId,
+            thumbsUp: thumbsUp + 1,
+          },
+        },
         variables: {
           postId,
         },

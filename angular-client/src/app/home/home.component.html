@@ -22,7 +22,7 @@
           [content]="post.content"
           [thumbsDown]="post.thumbsDown"
           [thumbsUp]="post.thumbsUp"
-          (voteUp)="onVoteUp(post.id)"
+          (voteUp)="onVoteUp(post.id, post.thumbsUp)"
           (voteDown)="onVoteDown(post.id)">
       </app-post-card>
       <app-post-form (submitForm)="addNewPost($event)"> </app-post-form>
