@@ -3,6 +3,8 @@ import { Apollo } from 'apollo-angular';
 import { GET_HOTTEST_POST, GET_POSTS } from '../graphql/queries';
 import { Subscription } from 'rxjs';
 import {ADD_POST, VOTE_DOWN, VOTE_UP} from '../graphql/mutations';
+import {GetPosts} from '../graphql/__generated__/GetPosts';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -22,11 +24,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.hottestPostLoading = true;
 
     this.getPostsSubscription = this.apollo
-      .watchQuery({
+      .watchQuery<GetPosts>({
         query: GET_POSTS,
       })
       .valueChanges
-      .subscribe(({ data }: any) => {
+      .subscribe(({ data }) => {
+        // Error in next line! Uncomment @ts-ignore.
+        // @ts-ignore
+        const apolloCodegen = data.doIExist;
+
         this.posts = data.getPosts;
       });
 

@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "generate-schema": "apollo service:download graphql.schema.json"
+    "generate-schema": "apollo service:download graphql.schema.json",
+    "generate-graphql-types": "apollo codegen:generate --target=typescript --localSchemaFile=graphql.schema.json"
   },
   "private": true,
   "dependencies": {
