@@ -1,30 +1,31 @@
 import {NgModule} from '@angular/core';
-import {ApolloModule, APOLLO_OPTIONS, Apollo} from 'apollo-angular';
-import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
+import { ApolloModule, Apollo } from 'apollo-angular';
+import { HttpBatchLinkModule, HttpBatchLink } from 'apollo-angular-link-http-batch';
+import { HttpHeaders } from '@angular/common/http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { setContext } from 'apollo-link-context';
 import { AuthService } from './core/services/auth.service';
+import { ApolloLink } from 'apollo-link';
 
 @NgModule({
-  exports: [ApolloModule, HttpLinkModule],
+  exports: [ApolloModule, HttpBatchLinkModule],
 })
 export class GraphQLModule {
   constructor(private readonly apollo: Apollo,
               private readonly authService: AuthService,
-              private readonly httpLink: HttpLink) {
+              private readonly httpLink: HttpBatchLink) {
 
     const uri = 'http://localhost:4000/graphql';
     const http = httpLink.create({ uri });
 
-    const authLink = setContext((_, { headers }) => {
+    const authLink = new ApolloLink((operation, forward) => {
       const token = this.authService.getToken();
 
-      return {
-        headers: {
-          ...headers,
-          authorization: token ? `Bearer ${token}` : '',
-        }
-      };
+      if (token) {
+        operation.setContext({
+          headers: new HttpHeaders().set('Authorization', `Bearer ${token}`),
+        });
+      }
+      return forward(operation);
     });
 
     apollo.create({

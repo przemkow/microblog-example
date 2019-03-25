@@ -9,6 +9,7 @@
     "generate-schema": "apollo service:download graphql.schema.json"
   },
   "dependencies": {
+    "apollo-link-batch-http": "^1.2.11",
     "vue": "^2.6.6",
     "vue-apollo": "^3.0.0-beta.11",
     "vue-router": "^3.0.1"
