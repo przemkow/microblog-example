@@ -1,6 +1,8 @@
 # Microblog apollo-graphql example
 
 Example of microblog aplication using apollo-graphql implemented in Apollo Server, Vue Angular and React
+### Slides: 
+https://slides.com/przemkow/introduction-to-apollo-graphql
 
 ### How to run:
 
